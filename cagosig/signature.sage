@@ -9,6 +9,10 @@ import warnings
 
 # 9.11 (9.8)
 # 9.15 (9.9)
+import sys
+import os
+
+
 
 
 JUPYTER = 'ipykernel'
@@ -73,6 +77,15 @@ class SignatureFunction:
         counter = copy(self.jumps_counter)
         counter.subtract(other.jumps_counter)
         return SignatureFunction(counter=counter)
+
+    def __mul__(self, number):
+        # scalar multiplication
+        counter = Counter({k : number * v \
+                          for k, v in self.jumps_counter.items()})
+        return SignatureFunction(counter=counter)
+
+    def __rmul__(self, number):
+        return(self.__mul__(number))
 
     def __eq__(self, other):
         return self.jumps_counter == other.jumps_counter
@@ -180,7 +193,7 @@ class SignaturePloter:
         fig, axes_matrix = plt.subplots(2, 2, sharey=True, figsize=(10,5))
 
         sf1.plot(subplot=True,
-                ax=axes_matrix[0][1])
+                 ax=axes_matrix[0][1])
 
         sf2.plot(subplot=True,
                 ax=axes_matrix[1][0],
@@ -211,25 +224,39 @@ class SignaturePloter:
         cls.show_and_save(save_path)
 
     @classmethod
-    def plot(cls, sf, subplot=False, ax=None, save_path=None,
-             title="",
+    def plot(cls, sf, subplot=False, ax=None,
+             save_path=None,
+             title='',
              alpha=1,
              color='blue',
              linestyle='solid',
+             special_point=None,
+             special_label='',
+             extraticks=None,
              ylabel=''):
 
         if ax is None:
             fig, ax = plt.subplots(1, 1)
 
         keys = sorted(sf.jumps_counter.keys())
-        y = [sf(k) + sf.jumps_counter[k] for k in keys]
+        y = [(sf(k) + sf.jumps_counter[k]) for k in keys[:-1]]
         xmax = keys[1:]
         xmin = keys[:-1]
 
         ax.set(ylabel=ylabel)
         ax.set(title=title)
         ax.hlines(y, xmin, xmax, color=color, linestyle=linestyle, alpha=alpha)
+        if special_point is not None:
+            arg, val = special_point
+            extraticks = extraticks or []
+            plt.xticks(list(plt.xticks()[0]) + extraticks)
+            ext = sf.extremum()[1]
+            ytext = ext/2 + 1/2
+            xtext = arg + 1/5
 
+            ax.annotate(special_label, xy=(arg, val), xytext=(xtext, ytext),
+                        arrowprops=dict(facecolor='black', shrink=0.05,
+                                        alpha=0.7, width=2),)
         if subplot:
             return ax
 

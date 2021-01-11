@@ -8,24 +8,14 @@ from typing import Iterable
 from collections import Counter
 from sage.arith.functions import LCM_list
 import importlib
-
+from .utility import import_sage
 
 SIGMA = 0
 SIGNATURE = 1
 
-def import_sage(module_name):
-
-    sage_name = module_name + ".sage"
-    python_name = module_name + ".sage.py"
-
-    if os.path.isfile(sage_name):
-        os.system('sage --preparse {}'.format(sage_name));
-        os.system('mv {} {}.py'.format(python_name, module_name))
-
-    if module_name in sys.modules:
-        return importlib.reload(sys.modules[module_name])
-    return importlib.import_module(module_name, package=None)
-sig = import_sage('signature')
+package = __name__.split('.')[0]
+path = os.path.dirname(__file__)
+sig = import_sage('signature', package=package, path=path)
 
 
 # #############################################################################

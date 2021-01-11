@@ -2,8 +2,8 @@
 
 # TBD: read about Factory Method, variable in docstring, sage documentation,
 # print calc. to output file
-# delete separation for twisted_part and untwisted_part
 # decide about printing option
+# make __main__?
 
 import os
 import sys
@@ -11,46 +11,93 @@ import sys
 import itertools as it
 import re
 import numpy as np
+import importlib
+from .utility import import_sage
 
-attach("signature.sage")
-attach("cable_signature.sage")
-
-# if not os.path.isfile('signature.py'):
-#     os.system('sage --preparse cable_signature.sage')
-#     os.system('mv cable_signature.sage.py cable_signature.py')
-# from signature import SignatureFunction
-
+package = __name__.split('.')[0]
+path = os.path.dirname(__file__)
+sig = import_sage('signature', package=package, path=path)
+cs = import_sage('cable_signature', package=package, path=path)
 
 
-class Config(object):
+class Config:
     def __init__(self):
 
         self.f_results = os.path.join(os.getcwd(), "results.out")
 
-        self.verbose = True
-        # self.verbose = False
+        self.short_3_layers_a = "[[ k[5],  k[3]], " + \
+                                "[ -k[1], -k[3]], " + \
+                                "[  k[3]], " + \
+                                "[ -k[4],  -k[6], -k[3]]]"
+
+        self.short_3_layers_b = "[[k[4],   k[1],  k[7]], " + \
+                                "[               -k[7]], " + \
+                                "[k[6],  k[7]], " + \
+                                "[-k[5], -k[7]]]"
+        self.schema_short1 = "[ [k[5],  k[3]], " + \
+                         "[ -k[1], -k[3]], " + \
+                         "[         k[3]], " + \
+                         "[ -k[6], -k[3]]]"
+
+        self.schema_short2 = "[[ k[1],  k[7]], " + \
+                         "[        -k[7]], " + \
+                         "[  k[6],  k[7]], " + \
+                         "[ -k[5], -k[7]]]"
+
+        self.schema_short = "[[ k[5],  k[3]], " + \
+                        "[ -k[1], -k[3]], " + \
+                        "[         k[3]], " + \
+                        "[ -k[6], -k[3]], " + \
+                        "[  k[1],  k[7]], " + \
+                        "[        -k[7]], " + \
+                        "[  k[6],  k[7]], " + \
+                        "[ -k[5], -k[7]]]"
 
 
-        # knot_formula is a schema for knots which signature function
-        # will be calculated
-        self.knot_formula = "[[k[0], k[1], k[3]], " + \
-                             "[-k[1], -k[3]], " + \
-                             "[k[2], k[3]], " + \
-                             "[-k[0], -k[2], -k[3]]]"
+        self.two_summands_schema = "[\
+                                     [k[0], k[1], k[4]], [-k[1], -k[3]],\
+                                     [k[2], k[3]], [-k[0], -k[2], -k[4]]\
+                                    ]"
+        knot_formula = "[[k[0], k[1], k[2]], [k[3], k[4]],\
+                         [-k[0], -k[3], -k[4]], [-k[1], -k[2]]]"
 
-        # self.knot_formula = "[[k[0], k[1], k[4]], [-k[1], -k[3]], \
-        #                      [k[2], k[3]], [-k[0], -k[2], -k[4]]]"
-        #
-        # self.knot_formula = "[[k[3]], [-k[3]], \
-        #                      [k[3]], [-k[3]] ]"
-        #
-        # self.knot_formula = "[[k[3], k[2], k[0]], [-k[2], -k[0]], \
-        #                      [k[1], k[0]], [-k[3], -k[1], -k[0]]]"
-        #
-        # self.knot_formula = "[[k[0], k[1], k[2]], [k[3], k[4]], \
-        #                      [-k[0], -k[3], -k[4]], [-k[1], -k[2]]]"
-        # self.knot_formula = "[[k[0], k[1], k[2]], [k[3]],\
-        #                          [-k[0], -k[1], -k[3]], [-k[2]]]"
+        knot_formula = "[[k[0], k[1], k[2]], [k[3]],\
+                         [-k[0], -k[1], -k[3]], [-k[2]]]"
+
+
+
+        self.two_small_summands_schema = "[[k[3]], [-k[3]],\
+                                          [k[3]], [-k[3]] ]"
+
+        self.four_summands_schema = "[[k[3], k[2], k[0]],\
+                                     [-k[2], -k[0]],\
+                                     [k[1], k[0]],\
+                                     [-k[3], -k[1], -k[0]]]"
+
+        self.four_summands_schema = "[[k[0], k[1], k[3]]," + \
+                                   " [-k[1], -k[3]]," + \
+                                   " [k[2], k[3]]," + \
+                                   " [-k[0], -k[2], -k[3]]]"
+
+        formula_1 = "[[k[0], k[5], k[3]], " + \
+                          "[-k[1], -k[3]], " + \
+                           "[k[2], k[3]], " + \
+                   "[-k[0], -k[2], -k[3]]]"
+        formula_2 = "[[k[4], k[1], k[7]], " + \
+                          "[-k[5], -k[7]], " + \
+                           "[k[6], k[7]], " + \
+                   "[-k[4], -k[6], -k[7]]]"
+
+        formula_1 = "[[k[0], k[5], k[3]], " + \
+                          "[-k[5], -k[3]], " + \
+                           "[k[2], k[3]], " + \
+                    "[-k[4], -k[2], -k[3]]]"
+        formula_2 = "[[k[4], k[1], k[7]], " + \
+                          "[-k[1], -k[7]], " + \
+                           "[k[6], k[7]], " + \
+                    "[-k[0], -k[6], -k[7]]]"
+
+
 
 
 
@@ -60,58 +107,130 @@ def main(arg=None):
         limit = int(arg[1])
     except (IndexError, TypeError):
         limit = None
+    conf = Config()
+    cable_loop_with_details(conf)
 
-    # global cable_template , cable_template_2, cable_template_1
+def print_sigma_for_cable(verbose=True, conf=None):
 
-    knot_formula = "[[k[0], k[1], k[3]], " + \
-                     "[-k[1], -k[3]], " + \
-                     "[k[2], k[3]], " + \
-                     "[-k[0], -k[2], -k[3]]]"
-    template = CableTemplate(knot_formula, q_vector=[3, 5, 7, 11])
-    cab = template.cable
-    # cab.plot_all_summands()
-    cab.plot_sum_for_theta_vector([0,4,0,4], save_to_dir=True)
-    # knot_formula = config.knot_formula
-    # q_vector = (3, 5, 7, 13)
-    # q_vector = (3, 5, 7, 11)
-    return
-    formula_1 = "[[k[0], k[5], k[3]], " + \
-                      "[-k[1], -k[3]], " + \
-                       "[k[2], k[3]], " + \
-               "[-k[0], -k[2], -k[3]]]"
-    formula_2 = "[[k[4], k[1], k[7]], " + \
-                      "[-k[5], -k[7]], " + \
-                       "[k[6], k[7]], " + \
-               "[-k[4], -k[6], -k[7]]]"
-    q_vector = (5, 13, 19, 41,\
-                7, 17, 23, 43)
-    q_vector_small = (3, 7, 13, 19,\
-                5, 11, 17, 23)
+    conf = conf or Config()
+    schema_short1 = conf.schema_short1
+    schema_short2 = conf.schema_short2
+    schema_short = conf.schema_short
+    schema_four = conf.four_summands_schema
 
-    cable_template_1 = CableTemplate(knot_formula=formula_1)
-    cable_template_2 = CableTemplate(knot_formula=formula_2)
-    cable_template = cable_template_1 + cable_template_2
-    # cable_with_shift = cable_template_1.add_with_shift(cable_template_2)
-    print(cable_with_shift.knot_formula)
-    # cable_template.fill_q_vector()
-    # print(cable_template.q_vector)
-    # print(cable_template.knot_formula)
-    cable = cable_template.cable
+    cable_template = cs.CableTemplate(knot_formula=schema_short)
+    cable_template.fill_q_vector()
+    q_v = cable_template.q_vector
+    print(q_v)
+    print(cable_template.cable.knot_description)
+    cable1 = cs.CableTemplate(knot_formula=schema_short1,
+                              verbose=verbose,
+                              q_vector=q_v
+                             ).cable
+    cable2 = cs.CableTemplate(knot_formula=schema_short2,
+                              verbose=verbose,
+                              q_vector=q_v
+                             ).cable
+    cable = cs.CableTemplate(knot_formula=schema_short1,
+                              verbose=verbose,
+                              q_vector=q_v
+                             ).cable
 
-    sf = cable(4,4,4,4,0,0,0,0)
-
-    sf = cable_template.cable.signature_as_function_of_theta(4,1,1,4,0,0,0,0)
+    cable.plot_sigma_for_summands()
+    # cable1.plot_sigma_for_summands()
+    # cable2.plot_sigma_for_summands()
 
 
-    # cable_template.cable.is_signature_big_for_all_metabolizers()
+def cable_loop_with_details(verbose=True, conf=None):
+    conf = conf or Config()
+    # verbose = False
+    schema_short1 = conf.schema_short1
+    schema_short2 = conf.schema_short2
+    schema_short = conf.schema_short
+    cable_template = cs.CableTemplate(knot_formula=schema_short)
+
+    list_of_q_vectors = []
+    # for el in [2, 3, 5, 7, 11, 13]:
+    for el in [2]:
+        cable_template.fill_q_vector(lowest_number=el)
+        q_v = cable_template.q_vector
+        print(q_v)
+        print(cable_template.cable.knot_description)
+        cable1 = cs.CableTemplate(knot_formula=schema_short1,
+                                  verbose=verbose,
+                                  q_vector=q_v
+                                 ).cable
+        cable2 = cs.CableTemplate(knot_formula=schema_short2,
+                                  verbose=verbose,
+                                  q_vector=q_v
+                                 ).cable
+    #     print("\n")
+    #     print(cable1.knot_description)
+        is_1 = cable1.is_function_big_for_all_metabolizers(invariant=cs.SIGMA)
+        is_2 = cable2.is_function_big_for_all_metabolizers(invariant=cs.SIGMA)
+        if is_1 and is_2:
+            print("sigma is big for all metabolizers")
+        else:
+            print("sigma is not big for all metabolizers")
+        print("\n" * 3)
+
+def few_cable_without_calc(verbose=False, conf=None):
+
+    conf = conf or Config()
+    schema_short1 = conf.schema_short1
+    schema_short2 = conf.schema_short2
+    schema_short = conf.schema_short
+
+    cable_template = cs.CableTemplate(knot_formula=schema_short)
+
+    list_of_q_vectors = []
+    for el in [2, 3, 5, 7, 11, 13]:
+        cable_template.fill_q_vector(lowest_number=el)
+        q_v = cable_template.q_vector
+        print(q_v)
+        print(cable_template.cable.knot_description)
+        cable1 = cs.CableTemplate(knot_formula=schema_short1,
+                              verbose=verbose,
+                              q_vector=q_v
+                             ).cable
+        cable2 = cs.CableTemplate(knot_formula=schema_short2,
+                                  verbose=verbose,
+                                  q_vector=q_v
+                                 ).cable
+        is_1 = cable1.is_function_big_for_all_metabolizers(invariant=sigma)
+        is_2 = cable2.is_function_big_for_all_metabolizers(invariant=sigma)
+        if is_1 and is_2:
+            print("sigma is big for all metabolizers")
+        else:
+            print("sigma is not big for all metabolizers")
+        print("\n" * 3)
+
+def smallest_cable(verbose=True, conf=None):
+
+    conf = conf or Config()
+    schema_short1 = conf.schema_short1
+    schema_short2 = conf.schema_short2
+    schema_short = conf.schema_short
 
 
-    cable_template_1 = CableTemplate(knot_formula=formula_1)
-    cable_template_2 = CableTemplate(knot_formula=formula_2)
-    cable_template = cable_template_1 + cable_template_2
-    # cable_template.cable.is_signature_big_for_all_metabolizers()
-    sf = cable_template.cable.signature_as_function_of_theta(4,4,4,4,0,0,0,0)
+    cable_template = cs.CableTemplate(knot_formula=schema_short)
+    q_v = cable_template.q_vector
+    print(q_v)
+    cable1 = cs.CableTemplate(knot_formula=schema_short1,
+                              verbose=verbose,
+                              q_vector=q_v).cable
+    cable2 = cs.CableTemplate(knot_formula=schema_short2,
+                              verbose=verbose,
+                              q_vector=q_v).cable
+    cable1.is_function_big_for_all_metabolizers(invariant=sigma)
+    cable2.is_function_big_for_all_metabolizers(invariant=sigma)
 
+def plot_many_untwisted_signature_functions(range_tuple=(1, 10)):
+    P = Primes()
+    for i in range(*range_tuple):
+        q = P.unrank(i)
+        a = cs.CableSummand.get_untwisted_signature_function(q=q)
+        a.plot()
 
 
 if __name__ == '__main__':
@@ -124,6 +243,29 @@ if __name__ == '__main__':
         pass
         # main()
 
+#
+#
+# formula_long = "[[k[0], k[5], k[3]], " + \
+#                   "[-k[5], -k[3]], " + \
+#                    "[k[2], k[3]], " + \
+#             "[-k[4], -k[2], -k[3]]" + \
+#             "[k[4], k[1], k[7]], " + \
+#                   "[-k[1], -k[7]], " + \
+#                    "[k[6], k[7]], " + \
+#             "[-k[0], -k[6], -k[7]]]"
+#
+#
+# formula_1 = "[[k[0], k[5], k[3]], " + \
+#                   "[-k[1], -k[3]], " + \
+#                          "[ k[3]], " + \
+#             "[-k[4], -k[6], -k[3]]]"
+#
+# formula_2 = "[[k[4], k[1], k[7]], " + \
+#                        "[ -k[7]], " + \
+#                    "[k[6], k[7]], " + \
+#             "[-k[0], -k[5], -k[7]]]"
+#
+#
 
 """
 This script calculates signature functions for knots (cable sums).
