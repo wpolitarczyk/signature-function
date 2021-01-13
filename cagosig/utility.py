@@ -2,25 +2,40 @@ import importlib
 import os
 import sys
 import re
+import math
+
+def mod_one(n):
+    """
+    Argument:
+        a number
+    Return:
+        the fractional part of the argument
+    Examples:
+        sage: mod_one(9 + 3/4)
+        3/4
+        sage: mod_one(-9 + 3/4)
+        3/4
+        sage: mod_one(-3/4)
+        1/4
+    """
+    return n - math.floor(n)
 
 
-
-def import_sage(module_name, package=None, path=None):
+def import_sage(module_name, package=None, path=''):
     """
     Import or reload SageMath modules with preparse if the sage file exist.
     """
 
     sage_name = module_name + ".sage"
     python_name = module_name + ".sage.py"
+
     if package is not None:
         path_from_package_name = re.sub(r'\.', r'\\', package)
-        file_path = os.path.join('', path, path_from_package_name)
-    else:
-        file_path = os.path.join('', path)
+        path = os.path.join(path, path_from_package_name)
 
-    sage_path = os.path.join(file_path, sage_name)
-    python_path = os.path.join(file_path, python_name)
-    module_path = os.path.join(file_path, module_name)
+    sage_path = os.path.join(path, sage_name)
+    python_path = os.path.join(path, python_name)
+    module_path = os.path.join(path, module_name)
 
     if os.path.isfile(sage_path):
         os.system('sage --preparse {}'.format(sage_path));

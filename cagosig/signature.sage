@@ -6,13 +6,12 @@ import inspect
 from PIL import Image
 from pathlib import Path
 import warnings
+from .utility import mod_one
 
 # 9.11 (9.8)
 # 9.15 (9.9)
 import sys
 import os
-
-
 
 
 JUPYTER = 'ipykernel'
@@ -366,8 +365,6 @@ class SignaturePloter:
                 """
             f.write(tail)
 
-def mod_one(n):
-    return n - floor(n)
 
 SignatureFunction.__doc__ = \
     """
@@ -379,20 +376,4 @@ SignatureFunction.__doc__ = \
     where the key is the argument at which the functions jumps
     and value encodes the value of the jump. Remember that we treat
     signature functions as defined on the interval [0,1).
-    """
-
-
-mod_one.__doc__ = \
-    """
-    Argument:
-        a number
-    Return:
-        the fractional part of the argument
-    Examples:
-        sage: mod_one(9 + 3/4)
-        3/4
-        sage: mod_one(-9 + 3/4)
-        3/4
-        sage: mod_one(-3/4)
-        1/4
     """

@@ -8,20 +8,18 @@ from typing import Iterable
 from collections import Counter
 from sage.arith.functions import LCM_list
 import importlib
-from .utility import import_sage
+from .utility import import_sage, mod_one
+from . import signature as sig
 
 SIGMA = 0
 SIGNATURE = 1
 
-package = __name__.split('.')[0]
-path = os.path.dirname(__file__)
-sig = import_sage('signature', package=package, path=path)
 
 
 # #############################################################################
 # 9.11 (9.8)
 # 9.15 (9.9)
-PLOTS_DIR = "plots"
+PLOTS_DIR = "../plots"
 
 class CableSummand:
 
@@ -343,8 +341,8 @@ class CableSum:
         else:
             save_path = None
 
-        for theta, knot in zip(thetas, self.knot_summands):
-            knot.plot_summand_for_theta(thetas, save_path=save_path)
+        # for theta, knot in zip(thetas, self.knot_summands):
+        #     knot.plot_summand_for_theta(thetas, save_path=save_path)
 
         # pp, sp, sf = self.signature_as_function_of_theta(*thetas)
         # title = self.knot_description + ", thetas = " + str(thetas)
@@ -670,8 +668,6 @@ class CableTemplate:
         return CableTemplate(knot_formula)
 
 
-def mod_one(n):
-    return n - floor(n)
 
 
 CableSum.get_signature_as_function_of_theta.__doc__ = \
