@@ -15,14 +15,13 @@ SIGMA = 0
 SIGNATURE = 1
 
 
-
 # #############################################################################
 # 9.11 (9.8)
 # 9.15 (9.9)
 PLOTS_DIR = "../plots"
 
-class CableSummand:
 
+class CableSummand:
 
     def __init__(self, knot_as_k_values, verbose=False):
 
@@ -135,9 +134,9 @@ class CableSummand:
         else:
             raise ValueError('k or q value must be given')
 
-        counter = Counter({(2 * a + 1)/(2 * q) : -signum
+        counter = Counter({(2 * a + 1)/(2 * q): -signum
                            for a in range(k)})
-        counter.update(Counter({(2 * a + 1)/(2 * q) : signum
+        counter.update(Counter({(2 * a + 1)/(2 * q): signum
                            for a in range(k + 1, q)}))
         return sig.SignatureFunction(counter=counter)
 

@@ -20,86 +20,88 @@ package = __name__.split('.')[0]
 path = os.path.dirname(__file__)
 
 
-class Config:
-    def __init__(self):
 
-        self.f_results = os.path.join(os.getcwd(), "results.out")
+# class Config:
+#     def __init__(self):
+#         self.f_results = os.path.join(os.getcwd(), "results.out")
 
-        self.short_3_layers_a = "[[ k[5],  k[3]], " + \
-                                "[ -k[1], -k[3]], " + \
-                                "[  k[3]], " + \
-                                "[ -k[4],  -k[6], -k[3]]]"
-
-        self.short_3_layers_b = "[[k[4],   k[1],  k[7]], " + \
-                                "[               -k[7]], " + \
-                                "[k[6],  k[7]], " + \
-                                "[-k[5], -k[7]]]"
-        self.schema_short1 = "[ [k[5],  k[3]], " + \
-                         "[ -k[1], -k[3]], " + \
-                         "[         k[3]], " + \
-                         "[ -k[6], -k[3]]]"
-
-        self.schema_short2 = "[[ k[1],  k[7]], " + \
-                         "[        -k[7]], " + \
-                         "[  k[6],  k[7]], " + \
-                         "[ -k[5], -k[7]]]"
-
-        self.schema_short = "[[ k[5],  k[3]], " + \
-                        "[ -k[1], -k[3]], " + \
-                        "[         k[3]], " + \
-                        "[ -k[6], -k[3]], " + \
-                        "[  k[1],  k[7]], " + \
-                        "[        -k[7]], " + \
-                        "[  k[6],  k[7]], " + \
-                        "[ -k[5], -k[7]]]"
+class Schemas:
 
 
-        self.two_summands_schema = "[\
-                                     [k[0], k[1], k[4]], [-k[1], -k[3]],\
-                                     [k[2], k[3]], [-k[0], -k[2], -k[4]]\
-                                    ]"
-        knot_formula = "[[k[0], k[1], k[2]], [k[3], k[4]],\
-                         [-k[0], -k[3], -k[4]], [-k[1], -k[2]]]"
-
-        knot_formula = "[[k[0], k[1], k[2]], [k[3]],\
-                         [-k[0], -k[1], -k[3]], [-k[2]]]"
-
-
-
-        self.two_small_summands_schema = "[[k[3]], [-k[3]],\
-                                          [k[3]], [-k[3]] ]"
-
-        self.four_summands_schema = "[[k[3], k[2], k[0]],\
-                                     [-k[2], -k[0]],\
-                                     [k[1], k[0]],\
-                                     [-k[3], -k[1], -k[0]]]"
-
-        self.four_summands_schema = "[[k[0], k[1], k[3]]," + \
-                                   " [-k[1], -k[3]]," + \
-                                   " [k[2], k[3]]," + \
-                                   " [-k[0], -k[2], -k[3]]]"
-
-        formula_1 = "[[k[0], k[5], k[3]], " + \
-                          "[-k[1], -k[3]], " + \
-                           "[k[2], k[3]], " + \
-                   "[-k[0], -k[2], -k[3]]]"
-        formula_2 = "[[k[4], k[1], k[7]], " + \
-                          "[-k[5], -k[7]], " + \
-                           "[k[6], k[7]], " + \
-                   "[-k[4], -k[6], -k[7]]]"
-
-        formula_1 = "[[k[0], k[5], k[3]], " + \
-                          "[-k[5], -k[3]], " + \
-                           "[k[2], k[3]], " + \
-                    "[-k[4], -k[2], -k[3]]]"
-        formula_2 = "[[k[4], k[1], k[7]], " + \
-                          "[-k[1], -k[7]], " + \
-                           "[k[6], k[7]], " + \
-                    "[-k[0], -k[6], -k[7]]]"
+    # knot_formula = "[[k[0],  k[1],  k[2]],\
+    #                 [        k[3],  k[4]],\
+    #                 [-k[0], -k[3], -k[4]],\
+    #                 [       -k[1], -k[2]]]"
+    #
+    # knot_formula = "[[k[0],   k[1],  k[2]],\
+    #                  [               k[3]],\
+    #                  [-k[0], -k[1], -k[3]],\
+    #                  [              -k[2]]]"
 
 
+    short_3_layers_a = "[[         k[5],  k[3]], " + \
+                        "[        -k[1], -k[3]], " + \
+                        "[                k[3]], " + \
+                        "[ -k[4], -k[6], -k[3]]]"
 
+    short_3_layers_b = "[[k[4],   k[1],  k[7]], " + \
+                        "[               -k[7]], " + \
+                        "[         k[6],  k[7]], " + \
+                        "[         -k[5], -k[7]]]"
 
+    schema_short1 = "[ [k[5],  k[3]], " + \
+                    "[ -k[1], -k[3]], " + \
+                    "[         k[3]], " + \
+                    "[ -k[6], -k[3]]]"
+
+    schema_short2 = "[[ k[1],  k[7]], " + \
+                    "[        -k[7]], " + \
+                    "[  k[6],  k[7]], " + \
+                    "[ -k[5], -k[7]]]"
+
+    schema_short = "[[ k[5],  k[3]], " + \
+                   "[ -k[1], -k[3]], " + \
+                   "[         k[3]], " + \
+                   "[ -k[6], -k[3]], " + \
+                   "[  k[1],  k[7]], " + \
+                   "[        -k[7]], " + \
+                   "[  k[6],  k[7]], " + \
+                   "[ -k[5], -k[7]]]"
+
+    # two_summands_schema = "[ [k[0], k[1], k[4]], [-k[1], -k[3]],\
+    #                        [k[2], k[3]], [-k[0], -k[2], -k[4]] ]"
+    # two_small_summands_schema = "[[k[3]], [-k[3]],\
+    #                             [k[3]], [-k[3]] ]"
+    #
+    # four_summands_schema = "[[k[3],  k[2],  k[0]],\
+    #                         [       -k[2], -k[0]],\
+    #                         [        k[1],  k[0]],\
+    #                         [-k[3], -k[1], -k[0]]]"
+    #
+    four_summands_schema = "[[ k[0],  k[1],  k[3]]," + \
+                           "[        -k[1], -k[3]]," + \
+                           "[         k[2],  k[3]]," + \
+                           "[ -k[0], -k[2], -k[3]]]"
+
+    # formula_1 = "[[ k[0],  k[5],  k[3]], " + \
+    #             "[        -k[1], -k[3]], " + \
+    #             "[         k[2],  k[3]], " + \
+    #             "[ -k[0], -k[2], -k[3]]]"
+    #
+    # formula_2 = "[[ k[4],  k[1],  k[7]], " + \
+    #             "[        -k[5], -k[7]], " + \
+    #             "[         k[6],  k[7]], " + \
+    #             "[ -k[4], -k[6], -k[7]]]"
+    #
+    # formula_1 = "[[ k[0], k[5],  k[3]], " + \
+    #             "[       -k[5], -k[3]], " + \
+    #             "[        k[2],  k[3]], " + \
+    #             "[-k[4], -k[2], -k[3]]]"
+    #
+    # formula_2 = "[[ k[4], k[1],  k[7]], " + \
+    #             "[       -k[1], -k[7]], " + \
+    #             "[        k[6],  k[7]], " + \
+    #             "[-k[0], -k[6], -k[7]]]"
 
 
 def main(arg=None):
@@ -110,13 +112,13 @@ def main(arg=None):
     conf = Config()
     cable_loop_with_details(conf)
 
-def print_sigma_for_cable(verbose=True, conf=None):
 
-    conf = conf or Config()
-    schema_short1 = conf.schema_short1
-    schema_short2 = conf.schema_short2
-    schema_short = conf.schema_short
-    schema_four = conf.four_summands_schema
+def print_sigma_for_cable(verbose=True, Schemas=None):
+
+    schema_short1 = Schemas.schema_short1
+    schema_short2 = Schemas.schema_short2
+    schema_short = Schemas.schema_short
+    schema_four = Schemas.four_summands_schema
 
     cable_template = cs.CableTemplate(knot_formula=schema_short)
     cable_template.fill_q_vector()
@@ -141,12 +143,11 @@ def print_sigma_for_cable(verbose=True, conf=None):
     # cable2.plot_sigma_for_summands()
 
 
-def cable_loop_with_details(verbose=True, conf=None):
-    conf = conf or Config()
+def cable_loop_with_details(verbose=True):
     # verbose = False
-    schema_short1 = conf.schema_short1
-    schema_short2 = conf.schema_short2
-    schema_short = conf.schema_short
+    schema_short1 = Schemas.schema_short1
+    schema_short2 = Schemas.schema_short2
+    schema_short = Schemas.schema_short
     cable_template = cs.CableTemplate(knot_formula=schema_short)
 
     list_of_q_vectors = []
@@ -174,12 +175,12 @@ def cable_loop_with_details(verbose=True, conf=None):
             print("sigma is not big for all metabolizers")
         print("\n" * 3)
 
-def few_cable_without_calc(verbose=False, conf=None):
 
-    conf = conf or Config()
-    schema_short1 = conf.schema_short1
-    schema_short2 = conf.schema_short2
-    schema_short = conf.schema_short
+def few_cable_without_calc(verbose=False):
+
+    schema_short1 = Schemas.schema_short1
+    schema_short2 = Schemas.schema_short2
+    schema_short = Schemas.schema_short
 
     cable_template = cs.CableTemplate(knot_formula=schema_short)
 
@@ -205,12 +206,12 @@ def few_cable_without_calc(verbose=False, conf=None):
             print("sigma is not big for all metabolizers")
         print("\n" * 3)
 
-def smallest_cable(verbose=True, conf=None):
 
-    conf = conf or Config()
-    schema_short1 = conf.schema_short1
-    schema_short2 = conf.schema_short2
-    schema_short = conf.schema_short
+def smallest_cable(verbose=True):
+
+    schema_short1 = Schemas.schema_short1
+    schema_short2 = Schemas.schema_short2
+    schema_short = Schemas.schema_short
 
 
     cable_template = cs.CableTemplate(knot_formula=schema_short)
@@ -225,6 +226,7 @@ def smallest_cable(verbose=True, conf=None):
     cable1.is_function_big_for_all_metabolizers(invariant=sigma)
     cable2.is_function_big_for_all_metabolizers(invariant=sigma)
 
+
 def plot_many_untwisted_signature_functions(range_tuple=(1, 10)):
     P = Primes()
     for i in range(*range_tuple):
@@ -234,8 +236,6 @@ def plot_many_untwisted_signature_functions(range_tuple=(1, 10)):
 
 
 if __name__ == '__main__':
-    global config
-    config = Config()
     if '__file__' in globals():
         # skiped in interactive mode as __file__ is not defined
         main(sys.argv)
@@ -243,8 +243,7 @@ if __name__ == '__main__':
         pass
         # main()
 
-#
-#
+
 # formula_long = "[[k[0], k[5], k[3]], " + \
 #                   "[-k[5], -k[3]], " + \
 #                    "[k[2], k[3]], " + \
