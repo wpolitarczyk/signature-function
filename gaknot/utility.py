@@ -38,8 +38,10 @@ def import_sage(module_name, package=None, path=''):
     module_path = os.path.join(path, module_name)
 
     if os.path.isfile(sage_path):
+        # print("\nPreparsing sage file " + sage_name + ".")
         os.system('sage --preparse {}'.format(sage_path));
         os.system('mv {} {}.py'.format(python_path, module_path))
+
 
     if package is not None:
         module_name = package + "." + module_name
@@ -47,6 +49,7 @@ def import_sage(module_name, package=None, path=''):
     if module_name in sys.modules:
         return importlib.reload(sys.modules[module_name])
     return importlib.import_module(module_name, package=package)
+
 
 def parse_sage(module_name):
 

@@ -4,8 +4,6 @@ r"""
 This package contains calculations of signature functions for knots (cable sums)
 
 
-It can be run as a sage script from the terminal or used in interactive mode.
-
 A knot (cable sum) is encoded as a list where each element (also a list)
 corresponds to a cable knot, e.g. a list
 [[1, 3], [2], [-1, -2], [-3]] encodes
