@@ -45,9 +45,9 @@ So we can work in the following steps:
 from .utility import import_sage
 import os
 
-
-package = __name__.split('.')[0]
-path = os.path.dirname(__file__)
-import_sage('signature', package=package, path=path)
+#
+# package = __name__.split('.')[0]
+# path = os.path.dirname(__file__)
+# import_sage('signature', package=package, path=path)
 # import_sage('cable_signature', package=package, path=path)
 # import_sage('main', package=package, path=path)

@@ -8,8 +8,11 @@ from typing import Iterable
 from collections import Counter
 from sage.arith.functions import LCM_list
 import importlib
-from .utility import import_sage, mod_one
+
+
+from .utility import import_sage
 from . import signature as sig
+
 
 SIGMA = 0
 SIGNATURE = 1
