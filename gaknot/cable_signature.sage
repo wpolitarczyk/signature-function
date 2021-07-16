@@ -22,8 +22,7 @@ else:  # called from package
     path = '../'
 sg = import_sage('signature', package=package, path=path)
 
-
-
+# constants - which invariants should be calculate
 SIGMA = 0
 SIGNATURE = 1
 
@@ -569,6 +568,7 @@ class CableSum:
             print("Satellite part = {}".format(sigma[1]))
             print("Sigma = {} ~ {}\n".format(sigma[2], int(sigma[2])))
 
+    # function that proves the main lemma
     def is_function_big_for_all_metabolizers(self, invariant=SIGMA):
         num_of_summands = len(self.knot_sum_as_k_valus)
         if num_of_summands % 4:
@@ -576,11 +576,17 @@ class CableSum:
             msg = "Function {}".format(f_name) + " is implemented only for " +\
                   "knots that are direct sums of 4n direct summands."
             raise ValueError(msg)
-
+        # check each p-primary part separately
         for shift in range(0, num_of_summands, 4):
+            # set character (twist) to be zero for all summands
             ranges_list = num_of_summands * [range(0, 1)]
+            # change ranges for all but one character for current p-primary part
             ranges_list[shift : shift + 3] = \
                 [range(0, i + 1) for i in self.patt_k_list[shift: shift + 3]]
+            # change range for last character in current p-primary part
+            # this one is consider to be 0 or 1
+            # For any characters combinations (vectors) [a_1, a_2, a_3, a_4] where a_4 != 0
+            # exists such as k < p that k * a_4 % p == 1.
             ranges_list[shift + 3] = range(0, 2)
             if not self.is_function_big_in_ranges(ranges_list, invariant):
                 return False

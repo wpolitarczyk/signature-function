@@ -1,8 +1,7 @@
 #!/usr/bin/env sage -python
 
 import sys
-import os
-
+# import os
 from collections import Counter
 import matplotlib.pyplot as plt
 import inspect
@@ -12,6 +11,7 @@ import warnings
 from .utility import mod_one
 
 
+# check if used in Jupyter Notebook to show plots in proper way
 JUPYTER = 'ipykernel'
 IPy_TERMINAL = 'IPython'
 
@@ -25,9 +25,10 @@ def get_ipython_info():
 global ipython_info
 ipython_info = get_ipython_info()
 
+#
+#
 # 9.11 (9.8)
 # 9.15 (9.9)
-
 
 
 class SignatureFunction:
