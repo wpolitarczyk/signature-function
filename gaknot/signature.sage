@@ -32,7 +32,14 @@ ipython_info = get_ipython_info()
 
 
 class SignatureFunction:
-
+    r"""signature function is entirely encoded by its signature
+    jump, the class stores only information about signature jumps
+    in a dictionary self.jumps_counter
+    The dictionary stores data of the signature jump as a key/values pair,
+    where the key is the argument at which the functions jumps
+    and value encodes the value of the jump. Remember that we treat
+    signature functions as defined on the interval \[0,1).
+    """
     def __init__(self, values=None, counter=None, plot_title=''):
 
         # counter of signature jumps
@@ -367,16 +374,3 @@ class SignaturePloter:
                 \end{document}
                 """
             f.write(tail)
-
-
-SignatureFunction.__doc__ = \
-    """
-    This simple class encodes twisted and untwisted signature functions
-    of knots. Since the signature function is entirely encoded by its signature
-    jump, the class stores only information about signature jumps
-    in a dictionary self.jumps_counter.
-    The dictionary stores data of the signature jump as a key/values pair,
-    where the key is the argument at which the functions jumps
-    and value encodes the value of the jump. Remember that we treat
-    signature functions as defined on the interval [0,1).
-    """

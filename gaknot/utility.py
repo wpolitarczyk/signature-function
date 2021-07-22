@@ -27,7 +27,7 @@ def import_sage(module_name, package=None, path=''):
     r"""Import or reload SageMath modules with preparse if the sage file exist.
 
     Arguments:
-        module_name - name of the module (without extension!)
+        module_name - name of the module (without file extension!)
         package - use only if module is used as a part of a package
     Return:
         module
@@ -37,8 +37,6 @@ def import_sage(module_name, package=None, path=''):
 
         # equivalent to import module_name as my_prefered_shortcut}
         my_prefered_shortcut = import_sage('module_name')
-
-
     """
     sage_name = module_name + ".sage"
     python_name = module_name + ".sage.py"

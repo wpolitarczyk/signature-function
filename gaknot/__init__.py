@@ -6,27 +6,33 @@ r"""calculations of signature function and sigma invariant of generalized algebr
 The package was used to prove Lemma 3.2 from a paper
 'On the slice genus of generalized algebraic knots' Maria Marchwicka and Wojciech Politarczyk).
 It contains the following submodules.
-    1) signature.sage - contains SignatureFunction class;
+    1) main.sage - with function prove_lemma
+    2) signature.sage - contains SignatureFunction class;
        it encodes twisted and untwisted signature functions
        of knots and allows to perform algebraic operations on them.
-    2) cable_signature.sage - contains the following classes:
+    3) cable_signature.sage - contains the following classes:
         a) CableSummand - it represents a single cable knot,
         b) CableSum - it represents a cable sum, i. e. linear combination of single cable knots;
            since the signature function and sigma invariant are additive under connected sum,
            the class use calculations from CableSummand objects,
-        c) CableTemplate - it represents schema for a cable sums.
-    3) main.sage - module that encodes interesting schemas for cable and perform calculations,
-       e.g. a proof for Lemma 3.2 from the paper.
+        c) CableTemplate - it represents a scheme for a cable sums.
+
 """
 
-#
-# A knot (cable sum) is encoded as a list where each element (also a list) corresponds to a cable knot, e.g. a list
-# [[1, 3], [2], [-1, -2], [-3]] encodes
-# T(2, 3; 2, 7) # T(2, 5) # -T(2, 3; 2, 5) # -T(2, 7).
-#
-# To calculate the number of characters for which signature function vanish use
-# the function .
-#
+
+from .utility import import_sage
+import os
+
+package = __name__.split('.')[0]
+dirname = os.path.dirname
+path = dirname(dirname(__file__))
+import_sage('signature', package=package, path=path)
+import_sage('cable_signature', package=package, path=path)
+import_sage('main', package=package, path=path)
+
+from .main import prove_lemma
+
+
 # EXAMPLES::
 #
 # sage: eval_cable_for_null_signature([[1, 3], [2], [-1, -2], [-3]])
@@ -56,13 +62,3 @@ It contains the following submodules.
 # 2) set each q_i all or choose range in which q_i should varry
 # 3) choose vector v / theta vector.
 #
-
-from .utility import import_sage
-import os
-
-package = __name__.split('.')[0]
-dirname = os.path.dirname
-path = dirname(dirname(__file__))
-import_sage('signature', package=package, path=path)
-import_sage('cable_signature', package=package, path=path)
-import_sage('main', package=package, path=path)
