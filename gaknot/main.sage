@@ -40,7 +40,7 @@ cs = import_sage('cable_signature', package=package, path=path)
 #         self.f_results = os.path.join(os.getcwd(), "results.out")
 
 class Schema:
-    r"""This class stores inreresting schema of cable sums.
+    r"""This class stores interesting schema of cable sums.
 
     Cable knots sum can be given as a scheme, e.g. a scheme from the paper:
     K(p_1 , p_2 , q_1 , q_2 , q_3 ) =
@@ -60,24 +60,24 @@ class Schema:
     See k_vector setter in class CableTemplate in cable_signature.sage module.
 
     Remark 1
-        In the paper we used p_i and q_i to describe torus knots and cables.
-        It was convinient for writing, but in all the code and documentation
+        In the paper, we used p_i and q_i to describe torus knots and cables.
+        It was convenient for writing, but in all the code and documentation
         only 'q' letter is used to encode torus knots or cables.
 
     Remark 2
         There are two ways to set k[i] values for a scheme:
-        via q_vector or via k_vector.
+        via q_vector or k_vector.
         Both should be lists and the relation is q[i] = 2 * k[i] + 1,
         i.e. q should be an odd prime and k should be an even number such that
         2 * k + 1 is prime.
-        To fill the scheme listed above we shoud use a list of lenght 8,
-        and k[0] will be ommited as it is not used in the scheme.
+        To fill the scheme listed above we should use a list of length 8,
+        and k[0] will be omitted as it is not used in the scheme.
 
     Remark 3
         Except for development purposes, q_vector was computed with
-        a methode CableTemplate.get_q_vector and flag slice=True.
+        a method CableTemplate.get_q_vector and flag slice=True.
         The reason for that is that we were interested only in cases
-        where a specific relation for each cabling-level is preserved.
+        where a specific relation for each cabling level is preserved.
         Consider a cable T(2, q_0; 2, q_1; ...;  2, q_n).
         Then for every q_i, q_(i + 1): q_(i + 1) > q_i * 4.
 
