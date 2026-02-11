@@ -16,7 +16,7 @@ It contains the following submodules.
            since the signature function and sigma invariant are additive under connected sum,
            the class use calculations from CableSummand objects,
         c) CableTemplate - it represents a scheme for a cable sums.
-
+    4) LT-signature.sage - functions for computing LT-signature functions for iterated torus knots.
 """
 
 
@@ -29,6 +29,7 @@ path = dirname(dirname(__file__))
 import_sage('signature', package=package, path=path)
 import_sage('cable_signature', package=package, path=path)
 import_sage('main', package=package, path=path)
+import_sage('LT_signature.sage', package=package, path=path)
 
 from .main import prove_lemma
 

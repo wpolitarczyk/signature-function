@@ -32,9 +32,6 @@ else:
 sg = import_sage('signature', package=package, path=path)
 cs = import_sage('cable_signature', package=package, path=path)
 
-
-
-
 # class Config:
 #     def __init__(self):
 #         self.f_results = os.path.join(os.getcwd(), "results.out")

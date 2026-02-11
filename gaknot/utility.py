@@ -1,9 +1,10 @@
 import importlib
 import os
 import sys
-import re
 import math
 import logging
+import subprocess
+import shutil
 
 def mod_one(n):
     r"""calculates the fractional part of the argument
@@ -50,7 +51,7 @@ def import_sage(module_name, package=None, path=''):
 
     if package is not None:
 
-        path_from_package_name = re.sub(r'\.', r'\\', package)
+        path_from_package_name = package.replace('.', os.sep)
         path = os.path.join(path, path_from_package_name)
 
         logging.info("path with package name: " + str(path))
@@ -62,8 +63,11 @@ def import_sage(module_name, package=None, path=''):
 
     if os.path.isfile(sage_path):
         logging.info("\nPreparsing sage file " + sage_name + ".")
-        os.system('sage --preparse {}'.format(sage_path));
-        os.system('mv {} {}.py'.format(python_path, module_path))
+        try:
+            subprocess.run(['sage', '--preparse', sage_path], check=True)
+            shutil.move(python_path, module_path + ".py")
+        except subprocess.CalledProcessError as e:
+            logging.error(f"Sage preparse failed for {sage_path}: {e}")
     else:
         logging.info("sage file not found: " + str(sage_path))
 
@@ -86,5 +90,10 @@ def parse_sage(module_name):
     python_name = os.path.join(dir, module_name + ".sage.py")
     module_name = os.path.join(dir, module_name + ".py")
 
-    os.system('sage --preparse {}'.format(sage_name))
-    os.system('mv {} {}'.format(python_name, module_name))
+    try:
+        subprocess.run(['sage', '--preparse', sage_name], check=True)
+        shutil.move(python_name, module_name + ".py")
+    except subprocess.CalledProcessError as e:
+        logging.error(f"Sage preparse failed for {sage_name}: {e}")
+
+        
