@@ -39,6 +39,10 @@ def import_sage(module_name, package=None, path=''):
         # equivalent to import module_name as my_prefered_shortcut}
         my_prefered_shortcut = import_sage('module_name')
     """
+    sage_cmd = shutil.which("sage")
+    if not sage_cmd:
+        raise EnvironmentError("The 'sage' executable was not found. Please ensure SageMath is installed and in your PATH.")
+    
     sage_name = module_name + ".sage"
     python_name = module_name + ".sage.py"
 
@@ -64,7 +68,7 @@ def import_sage(module_name, package=None, path=''):
     if os.path.isfile(sage_path):
         logging.info("\nPreparsing sage file " + sage_name + ".")
         try:
-            subprocess.run(['sage', '--preparse', sage_path], check=True)
+            subprocess.run([sage_cmd, '--preparse', sage_path], check=True)
             shutil.move(python_path, module_path + ".py")
         except subprocess.CalledProcessError as e:
             logging.error(f"Sage preparse failed for {sage_path}: {e}")
@@ -84,6 +88,10 @@ def import_sage(module_name, package=None, path=''):
 
 def parse_sage(module_name):
 
+    sage_cmd = shutil.which("sage")
+    if not sage_cmd:
+        raise EnvironmentError("The 'sage' executable was not found. Please ensure SageMath is installed and in your PATH.")
+
     dir = os.path.dirname(__file__)
 
     sage_name = os.path.join(dir, module_name + ".sage")
@@ -91,7 +99,7 @@ def parse_sage(module_name):
     module_name = os.path.join(dir, module_name + ".py")
 
     try:
-        subprocess.run(['sage', '--preparse', sage_name], check=True)
+        subprocess.run([sage_cmd, '--preparse', sage_name], check=True)
         shutil.move(python_name, module_name + ".py")
     except subprocess.CalledProcessError as e:
         logging.error(f"Sage preparse failed for {sage_name}: {e}")
