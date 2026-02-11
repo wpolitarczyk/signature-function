@@ -29,8 +29,14 @@ def LT_signature_torus_knot(p, q):
     The method follows formula (1) and (2) from Litherland's paper.
     """
 
+    if not isinstance(p, (int, Integer)) or not isinstance(q, (int, Integer)):
+        raise TypeError(f'Parameters p and q have to be integers. Got type(p) = {type(p)} and type(q) = {type(q)}.')
+
+    if p <= 1 or q <= 1:
+        raise ValueError(f'Parameters p and q must be >1. Got (p,q) = ({p}, {q}).')
+
     if math.gcd(p, q) != 1:
-        raise ValueError('Parameteres p and q must be relatively prime.')
+        raise ValueError(f'Parameteres p and q must be relatively prime. Got gcd={gcd(p,q)}.')
 
     def a(p, q, x):
         # Find i in range(1, q) such that (p*x*q - i*p)/q is an integer
@@ -94,10 +100,14 @@ def LT_signature_iterated_torus_knot(desc):
         desc: A list of pairs (p, q) describing the cabling process.
               Example: [(2,3), (6,5)] is the (6,5)-cable of T(2,3).
     """
-    # --- Validation Section ---
+    
     if not isinstance(desc, (list, tuple)):
         raise TypeError('The variable desc should be a list or tuple.')
 
+    # Start with an empty signature (effectively 0 everywhere)
+    # or None, handling the first iteration distinctly
+    total_sig = sg.SignatureFunction()
+    
     for i, el in enumerate(desc):
         # Allow lists or tuples
         if not isinstance(el, (list, tuple)) or len(el) != 2:
@@ -105,37 +115,21 @@ def LT_signature_iterated_torus_knot(desc):
         
         p, q = el
         
-        # Check for non-integers (handling both Python int and Sage Integer)
-        if not isinstance(p, (int, Integer)) or not isinstance(q, (int, Integer)):
-            raise TypeError(f'Parameters at index {i} must be integers. Got {type(p)}, {type(q)}.')
-            
-        if p <= 1 or q <= 1:
-            raise ValueError(f'Parameters at index {i} must be integers > 1. Got ({p}, {q}).')
-
-        # Mathematical consistency check
-        if gcd(p, q) != 1:
-            raise ValueError(f'Parameters at index {i} ({p}, {q}) must be relatively prime.')
-
-    # --- Calculation Section ---
-    
-    # Start with an empty signature (effectively 0 everywhere)
-    # or None, handling the first iteration distinctly
-    current_sig = None
-
-    for (p, q) in desc:
         # 1. Calculate the signature of the torus knot T(p,q)
-        torus_sig = LT_signature_torus_knot(p, q)
-        
-        if current_sig is None:
-            # Base case: The first knot in the sequence is just T(p,q)
-            current_sig = torus_sig
+        try:
+            torus_sig = LT_signature_torus_knot(p, q)
+        except (TypeError, ValueError) as e:
+            raise ValueError(f"Invalid knot description at index {i}: {e}")
+
+        if i == 0:
+            total_sig = total_sig + torus_sig
         else:
             # Recursive step: sigma_new(theta) = sigma_T(p,q)(theta) + sigma_old(p*theta)
             # Note: p is the number of longitudinal strands (the first entry in the pair)
-            reparametrized_old = reparametrize(current_sig, p)
-            current_sig = torus_sig + reparametrized_old
+            reparametrized_old = reparametrize(total_sig, p)
+            total_sig = torus_sig + reparametrized_old
             
-    return current_sig
+    return total_sig
 
 
 def LT_signature_generalized_algebraic_knot(desc):
@@ -158,7 +152,7 @@ def LT_signature_generalized_algebraic_knot(desc):
     
     # 1. Validate the top-level container
     if not isinstance(desc, (list, tuple)):
-        raise TypeError('The variable desc should be a list or tuple.')
+        raise TypeError(f'The variable desc should be a list or tuple. Got {type(desc)}.')
 
     # 2. Initialize the total signature
     # SignatureFunction() with no arguments creates a zero-function (empty counter),
