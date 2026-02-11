@@ -1,8 +1,7 @@
-# (Twisted) Signature functions of Generalized Algebraic Knots
+# Generalized Algebraic Knot Invariants
 
 This project allows calculating knot invariants for linear combinations of iterated torus knots.
-It was created as part of the proof for the main lemma from the paper **"On the slice genus of generalized algebraic knots"** (Maria Marchwicka and Wojciech Politarczyk).
-Majority of the code was written by Maria Marchwicka.
+It was created as part of the proof for the main lemma from the paper **"On the slice genus of generalized algebraic knots"** (Maria Marchwicka and Wojciech Politarczyk) ([arXiv:2107.11299](https://arxiv.org/abs/2107.11299)).
 
 ## Project Structure
 
@@ -38,9 +37,30 @@ print(sig)
 # Output: 0: 0, 1/6: -1, 5/6: 1, 1: 0.
 ```
 
-**Example: Operations and Plotting**
+### 2. Iterated Torus Knots
 
-The resulting object is a SignatureFunction, which supports evaluation, algebraic operations, and plotting.
+You can also compute the signature for iterated torus knots (cables) using LT_signature_iterated_torus_knot. The knot is described as a list of integer pairs $[(p_{1}, q_{1}), (p_{2}, q_{2}), \ldots]$.
+For example, `[(2,3), (6,5)]` represents the `(6,5)`-cable of the torus knot `T(2,3)`.
+
+**Example:**
+
+```python
+from gaknot.LT_signature import LT_signature_iterated_torus_knot
+
+# Define the iterated knot: (6,5)-cable of T(2,3)
+description = [(2, 3), (6, 5)]
+
+# Compute the signature
+iterated_sig = LT_signature_iterated_torus_knot(description)
+
+# Plot the result
+from gaknot.signature import SignaturePloter
+SignaturePloter.plot(iterated_sig, title="Signature of iterated knot [(2,3), (6,5)]")
+```
+
+### 3. Operations and Plotting
+
+The resulting object from both functions is a SignatureFunction, which supports evaluation, algebraic operations, and plotting.
 
 ```python
 from gaknot.signature import SignaturePloter
@@ -55,9 +75,9 @@ total_jump = sig.total_sign_jump()
 SignaturePloter.plot(sig, title="Signature of T(2,3)")
 ```
 
-### 2. Reproducing Proofs
+### 4. Reproducing Proofs
 
-To recreate the exact calculations done for the proof of Lemma 3.2, please refer to the lemma.ipynb file located in the notebooks/ directory.
+To recreate the exact calculations done for the proof of Lemma 3.2, please refer to the `lemma.ipynb` file located in the `notebooks/` directory.
 
 ## Documentation
 For a more detailed description of the classes and internal logic, please refer to the docstrings within the gaknot package files.
