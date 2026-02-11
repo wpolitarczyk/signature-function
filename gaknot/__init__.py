@@ -23,15 +23,17 @@ It contains the following submodules.
 from .utility import import_sage
 import os
 
-package = __name__.split('.')[0]
-dirname = os.path.dirname
-path = dirname(dirname(__file__))
-import_sage('signature', package=package, path=path)
-import_sage('cable_signature', package=package, path=path)
-import_sage('main', package=package, path=path)
-import_sage('LT_signature', package=package, path=path)
+package = __name__
+current_file_path = os.path.abspath(__file__)
+path = os.path.dirname(os.path.dirname(current_file_path))
 
-from .main import prove_lemma
+# Ensure these match your filenames (use underscores, not hyphens)
+import_sage('signature', package=package, path=path)
+# import_sage('cable_signature', package=package, path=path)
+# import_sage('main', package=package, path=path)
+# import_sage('LT_signature', package=package, path=path)
+
+# from .main import prove_lemma
 
 
 # EXAMPLES::
