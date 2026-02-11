@@ -136,3 +136,60 @@ def LT_signature_iterated_torus_knot(desc):
             current_sig = torus_sig + reparametrized_old
             
     return current_sig
+
+
+def LT_signature_generalized_algebraic_knot(desc):
+    """
+    Computes the Levine-Tristram signature of a generalized algebraic knot.
+    
+    A generalized algebraic knot is a connected sum of positive iterated torus knots 
+    or their concordance inverses.
+    
+    Arguments:
+        desc: A list (or tuple) of pairs, where each pair is (sign, knot_description).
+              - sign: 1 (for the knot itself) or -1 (for its inverse).
+              - knot_description: A list of (p, q) pairs valid for 
+                                  LT_signature_iterated_torus_knot.
+    
+    Example:
+        # Represents T(2,3) # -T(2,5) (connected sum of T(2,3) and inverse of T(2,5))
+        desc = [ (1, [(2,3)]), (-1, [(2,5)]) ]
+    """
+    
+    # 1. Validate the top-level container
+    if not isinstance(desc, (list, tuple)):
+        raise TypeError('The variable desc should be a list or tuple.')
+
+    # 2. Initialize the total signature
+    # SignatureFunction() with no arguments creates a zero-function (empty counter),
+    # which is the neutral element for addition.
+    total_sig = sg.SignatureFunction()
+
+    for i, element in enumerate(desc):
+        # A. Validate the pair structure
+        if not isinstance(element, (list, tuple)) or len(element) != 2:
+            raise ValueError(f'Element at index {i} must be a pair (sign, knot_description).')
+        
+        sign, knot_desc = element
+
+        # B. Validate the sign (must be strictly 1 or -1)
+        # Checking against standard int 1/-1 works for Sage Integers too.
+        if sign != 1 and sign != -1:
+            raise ValueError(f'Sign at index {i} must be 1 or -1. Got {sign}.')
+
+        # C. Compute the component signature
+        # We rely on the iterated torus knot function to validate the knot_desc.
+        try:
+            component_sig = LT_signature_iterated_torus_knot(knot_desc)
+        except (ValueError, TypeError) as e:
+            # Re-raise with context so the user knows which component failed
+            raise ValueError(f"Invalid knot description at index {i}: {e}")
+
+        # D. Accumulate the result
+        # SignatureFunction supports arithmetic operations (__add__, __sub__, __mul__)
+        if sign == 1:
+            total_sig = total_sig + component_sig
+        else:
+            total_sig = total_sig - component_sig
+
+    return total_sig
