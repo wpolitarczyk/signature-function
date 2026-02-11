@@ -90,7 +90,7 @@ Use the function `LT_signature_generalized_algebraic_knot` with a list of pairs 
 
 * `description`: A list of integer pairs defining the iterated torus knot (as in section 3).
 
-**Example: Verifying the slice nature of T(2,3)#−T(2,3)**
+**Example: Verifying the slice nature of $T(2,3) \#−T(2,3)$**
 
 ```python
 from gaknot.LT_signature import LT_signature_generalized_algebraic_knot
@@ -110,7 +110,7 @@ print(f"Is slice? {gen_sig.is_zero_everywhere()}")
 # Output: Is slice? True
 ```
 
-** Example: Compute and plot the signature function of $T(2,3;6,5) \# -T(3,4;7,9)$.**
+**Example: Compute and plot the signature function of $T(2,3;6,5) \# -T(3,4;7,9)$.**
 
 ```python
 # T(2,3;6,5) # -T(3,4;7,9)
