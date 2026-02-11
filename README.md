@@ -108,7 +108,7 @@ gen_sig = LT_signature_generalized_algebraic_knot(desc)
 # Check if the signature is zero everywhere (expected for a slice knot)
 print(f"Is slice? {gen_sig.is_zero_everywhere()}")
 # Output: Is slice? True
-``**
+```
 
 ** Example: Compute and plot the signature function of $T(2,3;6,5) \# -T(3,4;7,9)$.**
 
