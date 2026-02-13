@@ -6,6 +6,8 @@ import logging
 import subprocess
 import shutil
 
+from sage.all import ZZ, PolynomialRing
+
 def mod_one(n):
     r"""calculates the fractional part of the argument
 
@@ -22,6 +24,33 @@ def mod_one(n):
         1/4
     """
     return n - math.floor(n)
+
+
+def alexander_polynomial_torus_knot(p, q):
+    """Computes the Alexander polynomial of the torus knot T(p,q)."""
+    R = PolynomialRing(ZZ, 't')
+    t = R.gen()
+    num = (t**(p*q) - 1) * (t - 1)
+    den = (t**p - 1) * (t**q - 1)
+    return num // den
+
+
+def alexander_polynomial_iterated_knot(desc):
+    """
+    Computes the Alexander polynomial for an iterated torus knot.
+    Using the formula: Delta_{K_{p,q}}(t) = Delta_{T_{p,q}}(t) * Delta_K(t^p)
+    """
+    R = PolynomialRing(ZZ, 't')
+    t = R.gen()
+    poly = R(1)
+    
+    for p, q in desc:
+        Delta_pq = alexander_polynomial_torus_knot(p, q)
+        # Evaluate the companion's polynomial at t^p and multiply by the pattern's polynomial
+        poly = poly(t**p) * Delta_pq
+        
+    return poly
+
 
 def import_sage(module_name, package=None, path=''):
     r"""Import or reload SageMath modules with preparse if the sage file exist.

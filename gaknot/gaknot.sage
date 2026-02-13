@@ -79,6 +79,25 @@ class GeneralizedAlgebraicKnot:
         return LT_signature_generalized_algebraic_knot(self.description)
 
 
+    def alexander_polynomial(self):
+        """
+        Computes the Alexander polynomial of the generalized algebraic knot.
+        The polynomial of a connected sum is the product of the polynomials of its summands.
+        """
+        from sage.all import PolynomialRing, ZZ
+        # Local import of the helper function if it is in another file
+        from .utility import alexander_polynomial_iterated_knot
+        
+        R = PolynomialRing(ZZ, 't')
+        total_poly = R(1)
+        
+        for sign, knot_desc in self.description:
+            poly = alexander_polynomial_iterated_knot(knot_desc)
+            total_poly *= poly
+            
+        return total_poly
+
+
     def __add__(self, other):
         """
         Connected sum of two generalized algebraic knots.
