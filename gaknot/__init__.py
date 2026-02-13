@@ -32,6 +32,7 @@ import_sage('signature', package=package, path=path)
 import_sage('cable_signature', package=package, path=path)
 import_sage('main', package=package, path=path)
 import_sage('LT_signature', package=package, path=path)
+import_sage('gaknot', package=package, path=path)
 
 # from .main import prove_lemma
 
