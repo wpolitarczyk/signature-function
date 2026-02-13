@@ -97,6 +97,49 @@ class GeneralizedAlgebraicKnot:
             
         return total_poly
 
+    def is_positive_torus_knot(self):
+        """
+        Checks if the knot is exactly a single positive torus knot.
+        """
+        if len(self) != 1:
+            return False
+            
+        sign, knot_desc = self._desc[0]
+        return sign == 1 and len(knot_desc) == 1
+
+    def is_negative_torus_knot(self):
+        """
+        Checks if the knot is exactly a single negative torus knot 
+        (the concordance inverse of a positive torus knot).
+        """
+        if len(self) != 1:
+            return False
+            
+        sign, knot_desc = self._desc[0]
+        return sign == -1 and len(knot_desc) == 1
+
+    def is_iterated_torus_knot(self):
+        """
+        Checks if the knot is exactly a single positive iterated torus knot.
+        (Note: Returns True for basic positive torus knots as well).
+        """
+        if len(self) != 1:
+            return False
+            
+        sign, knot_desc = self._desc[0]
+        return sign == 1 and len(knot_desc) >= 1
+
+    def is_neg_iterated_torus_knot(self):
+        """
+        Checks if the knot is exactly a single negative iterated torus knot.
+        (Note: Returns True for basic negative torus knots as well).
+        """
+        if len(self) != 1:
+            return False
+            
+        sign, knot_desc = self._desc[0]
+        return sign == -1 and len(knot_desc) >= 1
+
 
     def __add__(self, other):
         """
