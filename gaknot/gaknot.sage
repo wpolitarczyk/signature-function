@@ -68,6 +68,17 @@ class GeneralizedAlgebraicKnot:
         return self._desc
 
 
+    def signature(self):
+        """
+        Computes the Levine-Tristram signature function of this generalized algebraic knot.
+        Returns a SignatureFunction object.
+        """
+        # Local import to prevent circular dependencies during package initialization
+        from .LT_signature import LT_signature_generalized_algebraic_knot
+        
+        return LT_signature_generalized_algebraic_knot(self.description)
+
+
     def __add__(self, other):
         """
         Connected sum of two generalized algebraic knots.
