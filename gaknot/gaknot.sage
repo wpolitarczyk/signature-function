@@ -116,6 +116,32 @@ class GeneralizedAlgebraicKnot:
         return GeneralizedAlgebraicKnot(new_knot_desc)
 
 
+    def __len__(self):
+        """Returns the number of summands in the connected sum."""
+        return len(self._desc)
+    
+
+    def __getitem__(self, i):
+        """
+        Allows indexing and slicing of the knot's summands.
+        Returns a new GeneralizedAlgebraicKnot.
+        """
+        try:
+            # Handle standard integer indexing (e.g., my_knot[0] or my_knot[-1])
+            if isinstance(i, (int, Integer)):
+                return GeneralizedAlgebraicKnot([self._desc[int(i)]])
+            
+            # Handle slicing (e.g., my_knot[0:2])
+            elif isinstance(i, slice):
+                return GeneralizedAlgebraicKnot(self._desc[i])
+                
+            else:
+                raise TypeError(f"Invalid argument type: {type(i)}")
+                
+        except IndexError:
+            raise IndexError(f"Knot index out of range. The knot has {len(self)} summand(s).")
+    
+
     @staticmethod
     def _it_torus_knot_desc_to_txt(desc):
         """
