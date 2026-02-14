@@ -8,3 +8,4 @@ __pycache__/
 /gaknot/gaknot.py
 /gaknot/signature.py
 /gaknot/main.py
+/pyrightconfig.json

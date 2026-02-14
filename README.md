@@ -18,6 +18,37 @@ The project is organized as follows:
 
 * **SageMath**: This project relies on the SageMath kernel. Ensure you have a working installation of SageMath (e.g., via Conda or a native install).
 
+## Installation and Usage
+You can use the `gaknot` module in your own projects or `SageMath` installation using one of the following methods:
+
+**Option 1: Environment Variable (Recommended)**
+
+To make the module available globally in your `SageMath` installation without modifying your scripts, add the directory containing the `gaknot` folder to the `SAGE_PATH` environment variable.
+
+On Linux/macOS:
+Add the following line to your shell configuration file (e.g., .bashrc, .zshrc):
+
+```bash
+export SAGE_PATH="/absolute/path/to/directory_containing_gaknot:$SAGE_PATH"
+```
+
+Restart your terminal. You can now import the module directly in any Sage session:
+
+```python
+sage: from gaknot import GeneralizedAlgebraicKnot
+```
+
+**Option 2: Manual Path Addition**
+
+If you prefer not to modify environment variables, you can manually add the path within your Python script or Jupyter notebook before importing the module:
+
+```python
+import sys
+# Append the directory containing the 'gaknot' package
+sys.path.append("/path/to/directory_containing_gaknot")
+
+from gaknot import GeneralizedAlgebraicKnot
+```
 ## Usage
 
 To use the package, ensure the parent directory of `gaknot` is in your Python path. You can then import modules directly.
