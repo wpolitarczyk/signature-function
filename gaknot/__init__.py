@@ -29,11 +29,12 @@ path = os.path.dirname(os.path.dirname(current_file_path))
 
 # Ensure these match your filenames (use underscores, not hyphens)
 import_sage('signature', package=package, path=path)
-import_sage('cable_signature', package=package, path=path)
-import_sage('main', package=package, path=path)
+# import_sage('cable_signature', package=package, path=path)
+# import_sage('main', package=package, path=path)
 import_sage('LT_signature', package=package, path=path)
 import_sage('gaknot', package=package, path=path)
 import_sage('H1_branched_cover', package=package, path=path)
+import_sage('character', package=package, path=path)
 
 # from .main import prove_lemma
 

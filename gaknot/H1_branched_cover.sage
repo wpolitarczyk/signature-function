@@ -163,7 +163,7 @@ class BranchedCoverHomology:
 
     def __getitem__(self, i):
         """Returns the structural dictionary for the i-th connected sum component."""
-        if i < 0 or i >= len(self._decomposition):
+        if int(i) < 0 or int(i) >= len(self._decomposition):
             raise IndexError("Summand index out of range.")
         return self._decomposition[i]
 

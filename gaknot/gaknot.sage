@@ -158,6 +158,9 @@ class GeneralizedAlgebraicKnot:
         new_knot_desc = [(-sign, knot_desc) for sign, knot_desc in self.description]
         return GeneralizedAlgebraicKnot(new_knot_desc)
 
+    def __sub__(self, other):
+        return self + (-other)
+
 
     def __len__(self):
         """Returns the number of summands in the connected sum."""
