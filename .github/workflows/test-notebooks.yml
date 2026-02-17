@@ -2,9 +2,9 @@ name: CI Tests
 
 on:
   push:
-    branches: [ master, setup-github-actions ]
+    branches: [ master ]
   pull_request:
-    branches: [ master, setup-github-actions ]
+    branches: [ master ]
 
 jobs:
   test:
