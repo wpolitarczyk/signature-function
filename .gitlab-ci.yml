@@ -1,0 +1,21 @@
+image:
+  name: sagemath/sagemath:latest
+  entrypoint: [""]
+
+variables:
+  MPLBACKEND: "Agg"
+
+before_script:
+  # Entrypoint is bypassed, so we run as root if needed or just use sage commands
+  - sage -pip install ipytest pytest nbmake nbconvert ipykernel
+  - sage -python -m ipykernel install --user --name sagemath --display-name "SageMath"
+
+test_notebooks:
+  script:
+    - cd gaknot
+    - for f in *.sage; do sage --preparse "$f" && mv "$f.py" "${f%.sage}.py"; done
+    - cd ..
+    - sage -python -m pytest --nbmake notebooks/*.ipynb --nbmake-kernel=sagemath
+  only:
+    - master
+    - setup-gitlab-ci
