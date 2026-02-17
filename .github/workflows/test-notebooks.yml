@@ -1,0 +1,51 @@
+name: CI Tests
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -l {0}
+    env:
+      MPLBACKEND: Agg
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Mamba
+        uses: conda-incubator/setup-miniconda@v3
+        with:
+          mamba-version: "true"
+          channels: conda-forge
+          activate-environment: sage_env
+          python-version: "3.11"
+
+      - name: Install Sage and Dependencies
+        run: |
+          mamba install sage ipytest pytest nbconvert ipykernel
+          mamba list
+          # Register the Sage kernel
+          python -m ipykernel install --user --name sagemath --display-name "SageMath"
+
+      - name: Preparse Sage files
+        run: |
+          cd gaknot
+          for f in *.sage; do
+            sage --preparse "$f"
+            mv "$f.py" "${f%.sage}.py"
+          done
+
+      - name: Run gaknot-test.ipynb
+        run: jupyter nbconvert --to notebook --execute notebooks/gaknot-test.ipynb --ExecutePreprocessor.kernel_name=sagemath --ExecutePreprocessor.timeout=600
+
+      - name: Run LT-signature-test.ipynb
+        run: jupyter nbconvert --to notebook --execute notebooks/LT-signature-test.ipynb --ExecutePreprocessor.kernel_name=sagemath --ExecutePreprocessor.timeout=600
+
+      - name: Run H1_branched_cover-test.ipynb
+        run: jupyter nbconvert --to notebook --execute notebooks/H1_branched_cover-test.ipynb --ExecutePreprocessor.kernel_name=sagemath --ExecutePreprocessor.timeout=600
