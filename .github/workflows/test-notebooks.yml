@@ -21,10 +21,12 @@ jobs:
       - name: Setup Mamba
         uses: conda-incubator/setup-miniconda@v3
         with:
-          mamba-version: "latest"
-          channels: conda-forge
           activate-environment: sage_env
           python-version: "3.11"
+          miniforge-variant: Miniforge3
+          miniforge-version: latest
+          use-mamba: true
+          channels: conda-forge
 
       - name: Install Sage and Dependencies
         run: |
