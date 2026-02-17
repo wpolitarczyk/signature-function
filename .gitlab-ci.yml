@@ -1,17 +1,27 @@
-image: condaforge/mambaforge:latest
-
 variables:
   MPLBACKEND: "Agg"
 
 test_notebooks:
-  before_script:
-    - mamba install -y sage ipytest pytest nbmake nbconvert ipykernel
-    - sage -python -m ipykernel install --user --name sagemath --display-name "SageMath"
+  tags:
+    - gaknot-runner
   script:
-    - cd gaknot
-    - for f in *.sage; do sage --preparse "$f" && mv "$f.py" "${f%.sage}.py"; done
-    - cd ..
-    - sage -python -m pytest --nbmake notebooks/*.ipynb --nbmake-kernel=sagemath
+    - |
+      zsh -c "
+        source ~/.zshrc
+        load_conda
+        conda activate sage_env
+        
+        # 1. Clean and Preparse
+        cd gaknot
+        python3 clean.py
+        for f in *.sage; do 
+          sage --preparse \"$f\" && mv \"$f.py\" \"${f%.sage}.py\"
+        done
+        cd ..
+        
+        # 2. Run Tests
+        pytest --nbmake notebooks/*.ipynb --nbmake-kernel=sagemath
+      "
   only:
     - master
     - setup-gitlab-ci
