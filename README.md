@@ -1,6 +1,7 @@
 # Generalized Algebraic Knot Invariants
 
 [![CI Tests](https://github.com/wpolitarczyk/signature-function/actions/workflows/test-notebooks.yml/badge.svg)](https://github.com/wpolitarczyk/signature-function/actions/workflows/test-notebooks.yml)
+[![pipeline status](https://gitlab.mimuw.edu.pl/wpolitarczyk/signature-function/badges/master/pipeline.svg)](https://gitlab.mimuw.edu.pl/wpolitarczyk/signature-function/-/commits/master)
 
 This project allows calculating signature invariants for generalized algebraic knots (`GA-knots`).
 Generalized algebraic knots are knots constructed as connected sums of positive iterated torus knots and their concordance inverses.
