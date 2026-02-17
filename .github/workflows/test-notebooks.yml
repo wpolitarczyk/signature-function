@@ -30,7 +30,8 @@ jobs:
 
       - name: Install Sage and Dependencies
         run: |
-          mamba install sage ipytest pytest nbconvert ipykernel nbmake setuptools
+          mamba install sage ipytest pytest nbconvert ipykernel nbmake
+          python -m pip install setuptools
           mamba list
           # Register the Sage kernel
           python -m ipykernel install --user --name sagemath --display-name "SageMath"
@@ -42,6 +43,11 @@ jobs:
             sage --preparse "$f"
             mv "$f.py" "${f%.sage}.py"
           done
+
+      - name: Diagnostic check
+        run: |
+          python -c "import pkg_resources; print('pkg_resources found')"
+          python -c "import nbmake; print('nbmake found')"
 
       - name: Run Tests in Notebooks
         run: |
