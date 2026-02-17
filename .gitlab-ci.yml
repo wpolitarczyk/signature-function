@@ -1,16 +1,12 @@
-image:
-  name: sagemath/sagemath:latest
-  entrypoint: [""]
+image: condaforge/mambaforge:latest
 
 variables:
   MPLBACKEND: "Agg"
 
-before_script:
-  # Entrypoint is bypassed, so we run as root if needed or just use sage commands
-  - sage -pip install ipytest pytest nbmake nbconvert ipykernel
-  - sage -python -m ipykernel install --user --name sagemath --display-name "SageMath"
-
 test_notebooks:
+  before_script:
+    - mamba install -y sage ipytest pytest nbmake nbconvert ipykernel
+    - sage -python -m ipykernel install --user --name sagemath --display-name "SageMath"
   script:
     - cd gaknot
     - for f in *.sage; do sage --preparse "$f" && mv "$f.py" "${f%.sage}.py"; done
