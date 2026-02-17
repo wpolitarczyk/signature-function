@@ -30,7 +30,7 @@ jobs:
 
       - name: Install Sage and Dependencies
         run: |
-          mamba install sage ipytest pytest nbconvert ipykernel nbmake
+          mamba install sage ipytest pytest nbconvert ipykernel nbmake setuptools
           mamba list
           # Register the Sage kernel
           python -m ipykernel install --user --name sagemath --display-name "SageMath"
