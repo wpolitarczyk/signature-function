@@ -9,32 +9,18 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash -l {0}
+    container: sagemath/sagemath:latest
     env:
       MPLBACKEND: Agg
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Mamba
-        uses: conda-incubator/setup-miniconda@v3
-        with:
-          activate-environment: sage_env
-          python-version: "3.11"
-          miniforge-variant: Miniforge3
-          miniforge-version: latest
-          use-mamba: true
-          channels: conda-forge
-
-      - name: Install Sage and Dependencies
+      - name: Install Testing Dependencies
         run: |
-          mamba install sage ipytest pytest nbconvert ipykernel nbmake setuptools
-          mamba list
-          python -m pip list
+          sage -pip install ipytest pytest nbmake nbconvert ipykernel
           # Register the Sage kernel
-          python -m ipykernel install --user --name sagemath --display-name "SageMath"
+          sage -python -m ipykernel install --user --name sagemath --display-name "SageMath"
 
       - name: Preparse Sage files
         run: |
@@ -44,14 +30,6 @@ jobs:
             mv "$f.py" "${f%.sage}.py"
           done
 
-      - name: Diagnostic check
-        run: |
-          which python
-          python --version
-          python -c "import setuptools; print('setuptools version:', setuptools.__version__)"
-          python -c "import pkg_resources; print('pkg_resources found')"
-          python -c "import nbmake; print('nbmake found')"
-
       - name: Run Tests in Notebooks
         run: |
-          pytest --nbmake notebooks/*.ipynb --nbmake-kernel=sagemath
+          sage -python -m pytest --nbmake notebooks/*.ipynb --nbmake-kernel=sagemath
