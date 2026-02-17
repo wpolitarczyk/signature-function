@@ -2,8 +2,6 @@ variables:
   MPLBACKEND: "Agg"
 
 test_notebooks:
-  tags:
-    - gaknot-runner
   script:
     - |
       zsh -c "
