@@ -9,7 +9,9 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    container: sagemath/sagemath:latest
+    container:
+      image: sagemath/sagemath:latest
+      options: --user root
     env:
       MPLBACKEND: Agg
     steps:
