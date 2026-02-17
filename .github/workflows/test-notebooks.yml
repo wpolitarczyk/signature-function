@@ -30,7 +30,7 @@ jobs:
 
       - name: Install Sage and Dependencies
         run: |
-          mamba install sage ipytest pytest nbconvert ipykernel
+          mamba install sage ipytest pytest nbconvert ipykernel nbmake
           mamba list
           # Register the Sage kernel
           python -m ipykernel install --user --name sagemath --display-name "SageMath"
@@ -43,11 +43,6 @@ jobs:
             mv "$f.py" "${f%.sage}.py"
           done
 
-      - name: Run gaknot-test.ipynb
-        run: jupyter nbconvert --to notebook --execute notebooks/gaknot-test.ipynb --ExecutePreprocessor.kernel_name=sagemath --ExecutePreprocessor.timeout=600
-
-      - name: Run LT-signature-test.ipynb
-        run: jupyter nbconvert --to notebook --execute notebooks/LT-signature-test.ipynb --ExecutePreprocessor.kernel_name=sagemath --ExecutePreprocessor.timeout=600
-
-      - name: Run H1_branched_cover-test.ipynb
-        run: jupyter nbconvert --to notebook --execute notebooks/H1_branched_cover-test.ipynb --ExecutePreprocessor.kernel_name=sagemath --ExecutePreprocessor.timeout=600
+      - name: Run Tests in Notebooks
+        run: |
+          pytest --nbmake notebooks/*.ipynb --nbmake-kernel=sagemath
