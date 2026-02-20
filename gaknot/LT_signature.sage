@@ -75,8 +75,7 @@ def LT_signature_torus_knot(p, q):
 def reparametrize(sig_func, p):
     """
     Helper function to compute sigma(p*theta) given sigma(theta).
-    This effectively 'compresses' the signature function, repeating it p times
-    scaled down by 1/p.
+    This effectively 'compresses' the signature function, repeating it r times.
     """
     # Access the jumps dictionary (Counter) from the SignatureFunction object
     old_counter = sig_func.jumps_counter
@@ -95,10 +94,15 @@ def reparametrize(sig_func, p):
 def LT_signature_iterated_torus_knot(desc):
     """
     Computes the Levine-Tristram signature for an iterated torus knot.
+    Follows Litherland's conventions.
     
     Arguments:
         desc: A list of pairs (p, q) describing the cabling process.
-              Example: [(2,3), (6,5)] is the (6,5)-cable of T(2,3).
+              Example: [(2,3), (6,5)] is the (2,3)-cable of T(6,5).
+ 
+              p is the number of meridional strands,
+              q is the number of longitudinal strands.
+              We also require p_i > 0, q_i > 1, p_n > q_n.
     """
     
     if not isinstance(desc, (list, tuple)):
@@ -107,6 +111,9 @@ def LT_signature_iterated_torus_knot(desc):
     # Start with an empty signature (effectively 0 everywhere)
     # or None, handling the first iteration distinctly
     total_sig = sg.SignatureFunction()
+    
+    # Reparametrization variable
+    r = 1
     
     for i, el in enumerate(desc):
         # Allow lists or tuples
@@ -120,14 +127,19 @@ def LT_signature_iterated_torus_knot(desc):
             torus_sig = LT_signature_torus_knot(p, q)
         except (TypeError, ValueError) as e:
             raise ValueError(f"Invalid knot description at index {i}: {e}")
+        
+        if i == len(desc) and q >= p:
+            raise ValueError(f"Expected p_n > q_n got p_n = {p}, q_n = {q}")
 
         if i == 0:
             total_sig = total_sig + torus_sig
         else:
-            # Recursive step: sigma_new(theta) = sigma_T(p,q)(theta) + sigma_old(p*theta)
-            # Note: p is the number of longitudinal strands (the first entry in the pair)
-            reparametrized_old = reparametrize(total_sig, p)
-            total_sig = torus_sig + reparametrized_old
+            # No recurrence. Litherland's formula at the top of page 79
+            reparametrized_new = reparametrize(torus_sig, r)
+            total_sig = torus_sig + reparametrized_new
+
+        #New reparametrizing factor according to the bottom of page 78
+        r *= q
             
     return total_sig
 
